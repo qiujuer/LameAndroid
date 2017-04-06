@@ -1,16 +1,19 @@
 package net.qiujuer.lame;
 
+import java.io.Closeable;
+
 /**
  * @author qiujuer Email:qiujuer@live.cn
  * @version 1.0.0
  */
-public class Lame {
+public class Lame implements Closeable {
     private long mNativeLame;
 
     public Lame(int inSampleRate, int outChannel, int outSampleRate, int outBitrate, int quality) {
         mNativeLame = nInit(inSampleRate, outChannel, outSampleRate, outBitrate, quality);
     }
 
+    @Override
     public void close() {
         nClose(mNativeLame);
         mNativeLame = 0;
