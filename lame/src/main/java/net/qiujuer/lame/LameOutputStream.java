@@ -24,19 +24,21 @@ public class LameOutputStream implements Closeable, Flushable {
 
     public void write(@NonNull short[] b, int len) throws IOException {
         int count;
-        do {
-            count = lame.encodeMono(b, len, outBuf);
+        //do {
+        count = lame.encodeMono(b, len, outBuf);
+        if (count > 0)
             outputStream.write(outBuf, 0, count);
-        } while (count > 0);
+        //} while (count > 0);
     }
 
     @Override
     public void flush() throws IOException {
         int count;
-        do {
-            count = lame.flush(outBuf);
+        //do {
+        count = lame.flush(outBuf);
+        if (count > 0)
             outputStream.write(outBuf, 0, count);
-        } while (count > 0);
+        //} while (count > 0);
         outputStream.flush();
     }
 
