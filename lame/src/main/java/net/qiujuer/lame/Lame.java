@@ -5,15 +5,37 @@ package net.qiujuer.lame;
  * @version 1.0.0
  */
 public class Lame {
-    public native void close();
+    private long mNativeLame;
 
-    public native int encodeMono(short[] buffer, int samples, byte[] outBuf);
+    public Lame(int inSampleRate, int outChannel, int outSampleRate, int outBitrate, int quality) {
+        mNativeLame = nInit(inSampleRate, outChannel, outSampleRate, outBitrate, quality);
+    }
 
-    public native int encodeStereo(short[] leftBuf, short[] rightBuf, int samples, byte[] outBuf);
+    public void close() {
+        nClose(mNativeLame);
+    }
 
-    public native int flush(byte[] outBuf);
+    public int encodeMono(short[] buffer, int samples, byte[] outBuf) {
+        return nEncodeMono(mNativeLame, buffer, samples, outBuf);
+    }
 
-    public native void init(int inSampleRate, int outChannel, int outSampleRate, int outBitrate, int quality);
+    public int encodeStereo(short[] leftBuf, short[] rightBuf, int samples, byte[] outBuf) {
+        return nEncodeStereo(mNativeLame, leftBuf, rightBuf, samples, outBuf);
+    }
+
+    public int flush(byte[] outBuf) {
+        return nFlush(mNativeLame, outBuf);
+    }
+
+    private static native int nEncodeMono(long lamePtr, short[] buffer, int samples, byte[] outBuf);
+
+    private static native int nEncodeStereo(long lamePtr, short[] leftBuf, short[] rightBuf, int samples, byte[] outBuf);
+
+    private static native int nFlush(long lamePtr, byte[] outBuf);
+
+    private static native void nClose(long lamePtr);
+
+    private static native long nInit(int inSampleRate, int outChannel, int outSampleRate, int outBitrate, int quality);
 
     static {
         System.loadLibrary("mp3lame-lib");
