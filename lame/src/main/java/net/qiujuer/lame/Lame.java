@@ -13,6 +13,7 @@ public class Lame {
 
     public void close() {
         nClose(mNativeLame);
+        mNativeLame = 0;
     }
 
     public int encodeMono(short[] buffer, int samples, byte[] outBuf) {

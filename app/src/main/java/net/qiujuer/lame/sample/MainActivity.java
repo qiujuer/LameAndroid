@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
 
-        Lame lame = new Lame(1, 1, 1, 1, 1);
+        Lame lame = new Lame(44100, 1, 44100, 32, 9);
+        lame.close();
         tv.setText(stringFromJNI() + lame.flush(null) + "");
     }
 
