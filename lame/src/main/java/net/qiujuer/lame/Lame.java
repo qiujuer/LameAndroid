@@ -15,19 +15,31 @@ public class Lame implements Closeable {
 
     @Override
     public void close() {
+        if (mNativeLame == 0) {
+            throw new RuntimeException("Lame was closed.");
+        }
         nClose(mNativeLame);
         mNativeLame = 0;
     }
 
     public int encodeMono(short[] buffer, int samples, byte[] outBuf) {
+        if (mNativeLame == 0) {
+            throw new RuntimeException("Lame was closed.");
+        }
         return nEncodeMono(mNativeLame, buffer, samples, outBuf);
     }
 
     public int encodeStereo(short[] leftBuf, short[] rightBuf, int samples, byte[] outBuf) {
+        if (mNativeLame == 0) {
+            throw new RuntimeException("Lame was closed.");
+        }
         return nEncodeStereo(mNativeLame, leftBuf, rightBuf, samples, outBuf);
     }
 
     public int flush(byte[] outBuf) {
+        if (mNativeLame == 0) {
+            throw new RuntimeException("Lame was closed.");
+        }
         return nFlush(mNativeLame, outBuf);
     }
 
