@@ -1,2 +1,2 @@
 # LameAndroid
-Lame mp3 converter with android model.
+Lame mp3 converter with android.
