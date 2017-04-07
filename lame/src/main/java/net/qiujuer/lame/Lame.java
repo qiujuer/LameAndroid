@@ -46,6 +46,11 @@ public class Lame implements Closeable {
         return mGetMp3bufferSize(mNativeLame);
     }
 
+    public int getMp3bufferSize(int samples) {
+        checkLame();
+        return mGetMp3bufferSizeWithSamples(mNativeLame, samples);
+    }
+
     @Override
     public void close() {
         checkLame();
@@ -71,6 +76,8 @@ public class Lame implements Closeable {
     private static native long nInit(int inSampleRate, int inChannels, int outSampleRate, int outBitrate, int model, int quality);
 
     private static native int mGetMp3bufferSize(long lamePtr);
+
+    private static native int mGetMp3bufferSizeWithSamples(long lamePtr, int samples);
 
     private static native int nEncodeShortInterleaved(long lamePtr, short[] bufLR, int samples, byte[] outMp3buf);
 
