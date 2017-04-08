@@ -48,15 +48,19 @@ public class LameOutputStream implements Closeable, Flushable {
         } else {
             mp3bufferSize = lame.getMp3bufferSize(writeBufferMaxLen / 2);
         }
+        Log.d(TAG, String.format("Lame initOutMp3buffer(%s-%s-%s-%s).", writeBufferMaxLen, mp3bufferSize,
+                lame.getMp3bufferSize(), (1.25 * writeBufferMaxLen + 7200)));
         this.outBuf = new byte[mp3bufferSize];
     }
 
     public void write(@NonNull short[] b, int len) throws IOException {
         int count = encoderDelegate.encode(b, len, outBuf);
-        if (count > 0)
+        if (count > 0) {
+            Log.d(TAG, "Lame encode:" + count);
             outputStream.write(outBuf, 0, count);
-        else if (count < 0)
-            Log.e(TAG, "Lame encode result:" + count);
+        } else if (count < 0) {
+            Log.e(TAG, "Lame encode error:" + count);
+        }
     }
 
     @Override
@@ -64,8 +68,10 @@ public class LameOutputStream implements Closeable, Flushable {
         int count;
         do {
             count = lame.flush(outBuf);
-            if (count > 0)
+            if (count > 0) {
+                Log.d(TAG, "Lame encode flush:" + count);
                 outputStream.write(outBuf, 0, count);
+            }
         } while (count > 0);
         outputStream.flush();
     }

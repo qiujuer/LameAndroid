@@ -51,23 +51,23 @@ public class Lame implements Closeable {
                 @IntRange(from = 0, to = 5) int model,
                 @IntRange(from = 0, to = 9) int quality) {
         if (outSampleRate > inSampleRate)
-            throw new InvalidParameterException("outSampleRate con't > inSampleRate.");
+            throw new InvalidParameterException("Initialize outSampleRate con't > inSampleRate.");
 
         if (outBitrate > 320 || outBitrate < 8)
-            throw new InvalidParameterException("outBitrate should between 8 and 320.");
+            throw new InvalidParameterException("Initialize outBitrate should between 8 and 320.");
 
         if (inChannels > 2 || inChannels < 1)
-            throw new InvalidParameterException("inChannels only set 1 or 2.");
+            throw new InvalidParameterException("Initialize inChannels only set 1 or 2.");
 
         if (model > 5 || model < 0)
-            throw new InvalidParameterException("model should between 0 and 5.");
+            throw new InvalidParameterException("Initialize model should between 0 and 5.");
 
         if (quality > 9 || quality < 0)
-            throw new InvalidParameterException("quality should between 0 and 9.");
+            throw new InvalidParameterException("Initialize quality should between 0 and 9.");
 
         long ptr = nInit(inSampleRate, inChannels, outSampleRate, outBitrate, model, quality);
         if (ptr <= 0) {
-            throw new RuntimeException("Init Lame failed with:" + ptr);
+            throw new RuntimeException("Initialize Lame failed:" + ptr);
         }
 
         mInChannels = inChannels;
