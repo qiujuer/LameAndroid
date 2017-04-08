@@ -17,6 +17,14 @@ JNIEXPORT jlong JNICALL Java_net_qiujuer_lame_Lame_nInit
 
 /*
  * Class:     net_qiujuer_lame_Lame
+ * Method:    nGetVersion
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_net_qiujuer_lame_Lame_nGetVersion
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     net_qiujuer_lame_Lame
  * Method:    mGetMp3bufferSize
  * Signature: (J)I
  */

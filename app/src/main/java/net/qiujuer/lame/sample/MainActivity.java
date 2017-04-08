@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView tv = (TextView) findViewById(R.id.sample_text);
-        Lame lame = new Lame(44100, 2, 44100, 5, 32, 7);
-        tv.setText(lame.getMp3bufferSize(20000) + " ");
+        Lame lame = new Lame(44100, 2, 44100);
+        tv.setText(lame.getVersion() + " " + lame.getMp3bufferSize(20000));
     }
 }

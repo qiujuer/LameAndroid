@@ -10,17 +10,60 @@ import java.security.InvalidParameterException;
  * @version 1.0.0
  */
 public class Lame implements Closeable {
-    private static final String TAG = Lame.class.getSimpleName();
+
+    public interface LameVersion {
+        int MPEG_1 = 1;
+        int MPEG_2 = 0;
+        int MPEG_2_5 = 2;
+    }
+
+    public interface LameModel {
+        int STEREO = 0;
+        int JOINT_STEREO = 1;
+        int MONO = 3;
+        int AUTO = 5;
+    }
+
+    public interface LameQuality {
+        int BEST = 0; //very slow
+        int NEAR_BEST = 2; //not too slow
+        int GOOD = 5; //fast
+        int OK = 7; //really fast
+        int WORST = 9;
+    }
+
     private long mNativeLame;
     private int mInChannels;
 
+    public Lame(int inSampleRate, @IntRange(from = 1, to = 2) int inChannels, int outSampleRate) {
+        this(inSampleRate, inChannels, outSampleRate, 32, LameModel.AUTO, LameQuality.OK);
+    }
+
+    public Lame(int inSampleRate, @IntRange(from = 1, to = 2) int inChannels, int outSampleRate,
+                @IntRange(from = 8, to = 320) int outBitrate,
+                @IntRange(from = 0, to = 9) int quality) {
+        this(inSampleRate, inChannels, outSampleRate, outBitrate, LameModel.AUTO, quality);
+    }
+
     public Lame(int inSampleRate, @IntRange(from = 1, to = 2) int inChannels,
-                int outSampleRate, int outBitrate, int model, int quality) {
+                int outSampleRate,
+                @IntRange(from = 8, to = 320) int outBitrate,
+                @IntRange(from = 0, to = 5) int model,
+                @IntRange(from = 0, to = 9) int quality) {
         if (outSampleRate > inSampleRate)
             throw new InvalidParameterException("outSampleRate con't > inSampleRate.");
 
+        if (outBitrate > 320 || outBitrate < 8)
+            throw new InvalidParameterException("outBitrate should between 8 and 320.");
+
         if (inChannels > 2 || inChannels < 1)
             throw new InvalidParameterException("inChannels only set 1 or 2.");
+
+        if (model > 5 || model < 0)
+            throw new InvalidParameterException("model should between 0 and 5.");
+
+        if (quality > 9 || quality < 0)
+            throw new InvalidParameterException("quality should between 0 and 9.");
 
         long ptr = nInit(inSampleRate, inChannels, outSampleRate, outBitrate, model, quality);
         if (ptr <= 0) {
@@ -39,6 +82,11 @@ public class Lame implements Closeable {
         if (mNativeLame <= 0) {
             throw new RuntimeException("Lame was closed.");
         }
+    }
+
+    public int getVersion() {
+        checkLame();
+        return nGetVersion(mNativeLame);
     }
 
     public int getMp3bufferSize() {
@@ -74,6 +122,8 @@ public class Lame implements Closeable {
     }
 
     private static native long nInit(int inSampleRate, int inChannels, int outSampleRate, int outBitrate, int model, int quality);
+
+    private static native int nGetVersion(long lamePtr);
 
     private static native int mGetMp3bufferSize(long lamePtr);
 

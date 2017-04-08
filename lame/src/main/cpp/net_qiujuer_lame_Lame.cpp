@@ -25,7 +25,13 @@ Java_net_qiujuer_lame_Lame_nInit(JNIEnv *env, jclass type, jint inSampleRate, ji
         return code;
     }
     return (long) lameFlags;
+}
 
+JNIEXPORT jint JNICALL
+Java_net_qiujuer_lame_Lame_nGetVersion(JNIEnv *env, jclass type, jlong lamePtr) {
+    lame_global_flags *lameFlags;
+    lameFlags = (lame_global_flags *) lamePtr;
+    return lame_get_version(lameFlags);
 }
 
 JNIEXPORT jint JNICALL
@@ -46,16 +52,16 @@ Java_net_qiujuer_lame_Lame_mGetMp3bufferSizeWithSamples(JNIEnv *env, jclass type
     int bitrate = lame_get_brate(lameFlags);
     int sampleRate = lame_get_out_samplerate(lameFlags);
 
-    float p = (bitrate / 8) / sampleRate;
+    float p = (bitrate / 8.0f) / sampleRate;
 
     if (version == 0) {
-        // MPEG1: num_samples*(bitrate/8)/samplerate + 4*1152*(bitrate/8)/samplerate + 512
-        return (jint) ceil(samples * p + 4 * 1152 * p + 512);
-    } else if (version == 1) {
         // MPEG2: num_samples*(bitrate/8)/samplerate + 4*576*(bitrate/8)/samplerate + 256
         return (jint) ceil(samples * p + 4 * 576 * p + 256);
+    } else if (version == 1) {
+        // MPEG1: num_samples*(bitrate/8)/samplerate + 4*1152*(bitrate/8)/samplerate + 512
+        return (jint) ceil(samples * p + 4 * 1152 * p + 512);
     } else {
-        return (jint) (1.25 * samples + 7200);
+        return (jint) ceil((1.25 * samples + 7200));
     }
 }
 
