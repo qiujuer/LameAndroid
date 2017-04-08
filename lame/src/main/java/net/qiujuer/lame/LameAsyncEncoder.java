@@ -43,12 +43,12 @@ public class LameAsyncEncoder {
         executor.execute(new WriterRunnable(warp));
     }
 
-    public Future pushEnd() {
+    public Future makeEnd() {
         return executor.submit(new EndRunnable());
     }
 
-    public void pushEndWithWait() {
-        Future future = pushEnd();
+    public void awaitEnd() {
+        Future future = makeEnd();
         try {
             future.get();
         } catch (InterruptedException | ExecutionException e) {
