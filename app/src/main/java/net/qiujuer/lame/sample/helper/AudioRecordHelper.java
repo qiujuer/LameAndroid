@@ -111,7 +111,7 @@ public class AudioRecordHelper {
         final int shortBufferSize = minShortBufferSize;
         final RecordCallback callback = this.callback;
 
-        Lame lame = new Lame(audioRecorder.getSampleRate(),3,
+        Lame lame = new Lame(audioRecorder.getSampleRate(),audioRecorder.getChannelCount(),
                 audioRecorder.getSampleRate());
         LameOutputStream lameOutputStream = new LameOutputStream(lame, outputStream, shortBufferSize);
         LameAsyncEncoder lameAsyncEncoder = new LameAsyncEncoder(lameOutputStream, shortBufferSize);
