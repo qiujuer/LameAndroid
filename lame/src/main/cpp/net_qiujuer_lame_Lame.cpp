@@ -20,7 +20,7 @@ Java_net_qiujuer_lame_Lame_nInit(JNIEnv *env, jclass type, jint inSampleRate, ji
     lame_set_mode(lameFlags, (MPEG_mode) model);
     lame_set_quality(lameFlags, quality);
     int code = lame_init_params(lameFlags);
-    if (code == -1) {
+    if (code != 0) {
         lame_close(lameFlags);
         return code;
     }

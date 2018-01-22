@@ -16,6 +16,11 @@ android {
                 cppFlags "-std=c++11 -frtti -fexceptions"
             }
         }
+
+        ndk {
+            abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a',
+                    'arm64-v8a'
+        }
     }
     buildTypes {
         release {
@@ -35,7 +40,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:support-annotations:25.3.0'
+    compile 'com.android.support:support-annotations:27.0.2'
     testCompile 'junit:junit:4.12'
 }
 

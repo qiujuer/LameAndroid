@@ -31,6 +31,8 @@
 #endif
 
 
+#include <malloc.h>
+#include <string.h>
 #include "lame.h"
 #include "machine.h"
 
